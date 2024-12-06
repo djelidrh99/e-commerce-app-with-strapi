@@ -1,0 +1,57 @@
+#header one bg color
+bg-slate-900
+ button header bg 
+ !bg-red-500
+
+ border color
+bg-gray-300
+bg-slate-300
+
+text color 
+text-gray-600
+
+
+ {
+    "compilerOptions": {
+      "checkJs": true,
+      "jsx": "react-jsx",
+      "baseUrl": "src",
+      "resolveJsonModule": true,
+      "lib": ["es6", "dom", "es2017"],
+    },
+    "include": [
+      "src"
+    ],
+    "exclude": [
+      "node_modules",
+      "build"
+    ]
+  }
+
+ 
+LIFESTYLE COLLECTION
+WOMEN
+SALE UP TO
+30% OFF
+Get Free Shipping on orders over $99.00
+
+NEW ARRIVALS
+SUMMER
+SALE 20% OFF
+shop now
+
+Fast Delivery
+
+Start from $10
+
+Money Guarantee
+
+7 Days Back
+
+365 Days
+
+For free return
+
+Payment
+
+Secure system
