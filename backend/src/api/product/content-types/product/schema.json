@@ -32,8 +32,8 @@
       "required": true
     },
     "productRating": {
-      "required": true,
-      "type": "decimal"
+      "type": "decimal",
+      "required": true
     },
     "productCategory": {
       "type": "enumeration",
@@ -41,6 +41,11 @@
         "men",
         "women"
       ],
+      "required": true
+    },
+    "counter": {
+      "type": "integer",
+      "default": 1,
       "required": true
     }
   }

@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "moduleResolution": "nodenext",
-    "target": "ES2021",
-    "checkJs": true,
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "target": "ESNext",
     "allowJs": true
-  }
+  },
+  "include": ["**/*.js"],
+  "exclude": ["node_modules"]
 }
