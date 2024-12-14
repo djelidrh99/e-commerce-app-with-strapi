@@ -40,9 +40,9 @@ export default function SubMain() {
 
 
 // eslint-disable-next-line react/prop-types
-function SubMainBox({icon,title,subtitle,key}) {
+function SubMainBox({icon,title,subtitle}) {
   return(
-      <Stack key={key} sx={{p:"10px 50px 10px 0",flexGrow:1,justifyContent: useMediaQuery('(min-width:600px)') ?"center": "left"}}  direction="row" spacing={1} alignItems="center">
+      <Stack  sx={{p:"10px 50px 10px 0",flexGrow:1,justifyContent: useMediaQuery('(min-width:600px)') ?"center": "left"}}  direction="row" spacing={1} alignItems="center">
         {icon}
         <Stack direction="column" spacing={1}> 
             <Typography variant="body1">{title}</Typography>

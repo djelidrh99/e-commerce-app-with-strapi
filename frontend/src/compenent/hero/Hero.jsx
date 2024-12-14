@@ -35,8 +35,6 @@ export default function Hero() {
            modules={[Pagination]}
       spaceBetween={50}
       slidesPerView={1}
-      onSlideChange={() => console.log('slide change')}
-      onSwiper={(swiper) => console.log(swiper)}
       pagination={{ clickable: true }}
       className="flex-1"
       loop 

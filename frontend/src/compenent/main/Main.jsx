@@ -5,18 +5,11 @@ import Typography from "@mui/material/Typography";
 import { useTheme } from "@emotion/react";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-
-// card import
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Rating from "@mui/material/Rating";
+import { motion, AnimatePresence } from "framer-motion";
 
 //modal import
 import Modal from "@mui/material/Modal";
@@ -24,6 +17,13 @@ import Button from "@mui/material/Button";
 
 //api import
 import { useGetProductByNameQuery } from "../../product";
+// setCounter Import
+import { useSetCounter } from "../../Context/CounterCartContext";
+
+import Cart from "./Cart";
+import MyCard from "./Card";
+import Error from "./Error";
+import Loading from "./Loading";
 
 const style = {
   position: "absolute",
@@ -41,30 +41,43 @@ const style = {
 };
 
 export default function Main() {
+  const setCounter = useSetCounter();
   const theme = useTheme();
   const [alignment, setAlignment] = useState("All Product");
   const [open, setOpen] = useState(false);
   const [productWantToaddToCart, setProductWantToaddToCart] = useState(null);
-  const handleOpen = () => setOpen(true);
+  const [productInsideCart, setProductInsideCart] = useState([]);
   const handleClose = () => setOpen(false);
 
+useEffect(()=>{
+if(sessionStorage.getItem("myCart")) {
+setProductInsideCart(JSON.parse(sessionStorage.getItem("myCart")))
+}
+},[])
   const [img, setImg] = useState("public/Product/final.png");
   const handleAlignment = (event, newSrc) => {
-    setImg(newSrc);
+    if (newSrc !== null) {
+      setImg(newSrc);
+    }
   };
 
   const handleChange = (event, newAlignment) => {
-    setAlignment(newAlignment);
+    if (newAlignment !== null) {
+      setAlignment(newAlignment);
+    }
   };
   const [category, setCategories] = useState("products?populate=*");
   // products?filters[productCategory][$eq]=men&populate=*
 
   const { data, error, isLoading } = useGetProductByNameQuery(category);
-  console.log(error);
-  console.log(isLoading);
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error loading products: {error.message}</p>;
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <Error />;
+  }
   if (!data || !data.data) return <p>No products available</p>;
 
   let allProduct = [];
@@ -74,79 +87,7 @@ export default function Main() {
 
   const ProductList = allProduct.map((product) => {
     return (
-      <Card
-        key={product.id}
-        sx={{
-          maxWidth: 345,
-          ":hover .MuiCardMedia-root": { transform: "scale(1.1)" },
-          overflow: "hidden !important",
-        }}
-      >
-        <CardMedia
-          component="img"
-          height="194"
-          image={`http://localhost:1337/${product.productImg[0].url}`}
-          alt="Paella dish"
-          sx={{
-            cursor: "pointer",
-            transition: "0.3s",
-            overflow: "hidden !important",
-          }}
-        />
-        <CardContent>
-          <Stack
-            justifyContent="space-between"
-            alignItems="center"
-            direction="row"
-            sx={{ my: "10px" }}
-          >
-            <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-              {product.productTitile}
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{ color: theme.palette.text.secondary }}
-            >
-              {product.productPrice}
-            </Typography>
-          </Stack>
-          <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            {product.productDesription}
-          </Typography>
-        </CardContent>
-        <CardActions
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-          disableSpacing
-        >
-          <Button
-            onClick={() => {
-              productModal(product.productImg[0].url, product);
-            }}
-            sx={{
-              fontWeight: "bold",
-              cursor: "pointer",
-              color: "rgb(29 78 216)",
-              transition: "0.3s",
-              ":hover": { color: "rgb(30 64 175)" },
-            }}
-          >
-            <AddShoppingCartIcon sx={{ mr: "10px" }} />
-            Add To Cart
-          </Button>
-          <Stack spacing={1}>
-            <Rating
-              name="half-rating-read"
-              defaultValue={product.productRating}
-              precision={0.5}
-              readOnly
-            />
-          </Stack>
-        </CardActions>
-      </Card>
+      <MyCard key={product.id} product={product} productModal={productModal} />
     );
   });
 
@@ -155,6 +96,46 @@ export default function Main() {
     setImg(url);
     setProductWantToaddToCart(pr);
   }
+
+  function counterIncramentAndAddProductToCart(confirmProduct) {
+    if (productInsideCart) {
+      const productExist = productInsideCart.find((product) => {
+        return product.id === confirmProduct.id;
+      });
+      if (productExist) {
+        // eslint-disable-next-line react/prop-types
+        const newProducListInCart = productInsideCart.map((product) => {
+          return product.id === confirmProduct.id
+            ? { ...product, counter: +product.counter + 1 }
+            : product;
+        });
+        // eslint-disable-next-line react/prop-types
+        setProductInsideCart(newProducListInCart);
+        sessionStorage.setItem("myCart", JSON.stringify(newProducListInCart));
+      } else {
+        setProductInsideCart((prev) => {
+          const updateCart=[...prev, confirmProduct]
+        sessionStorage.setItem("myCart", JSON.stringify(updateCart));
+        setCounter(updateCart.length)
+        return updateCart;
+        });
+
+      }
+    } else {
+      setProductInsideCart((prev) => {
+        const updateCart=[...prev, confirmProduct]
+        sessionStorage.setItem("myCart", JSON.stringify(updateCart));
+        setCounter(updateCart.length)
+        return updateCart;
+      });
+
+    }
+    setOpen(false);
+  }
+
+
+
+
 
   return (
     <Container>
@@ -237,6 +218,8 @@ export default function Main() {
         </ToggleButtonGroup>
       </Stack>
       <Box
+        component={motion.div}
+        layout
         sx={{
           display: "flex",
           alignItems: "center",
@@ -245,7 +228,7 @@ export default function Main() {
           flexWrap: "wrap",
         }}
       >
-        {ProductList}
+        <AnimatePresence>{ProductList}</AnimatePresence>
       </Box>
       {productWantToaddToCart !== null && (
         <Modal
@@ -271,7 +254,7 @@ export default function Main() {
                   height: "330px",
                   maxWidth: "300px",
                 }}
-                src={`http://localhost:1337/${img}`}
+                src={`${import.meta.env.VITE_SOME_API}/${img}`}
                 alt=""
               />
             </Box>
@@ -286,10 +269,7 @@ export default function Main() {
                 <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                   {productWantToaddToCart.productTitile}
                 </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{ color: theme.palette.text.secondary }}
-                >
+                <Typography variant="body1" sx={{ color: "rgb(239 68 68)" }}>
                   {productWantToaddToCart.productPrice}
                 </Typography>
               </Stack>
@@ -309,7 +289,7 @@ export default function Main() {
                 >
                   <img
                     className="w-12 h-12"
-                    src={`http://localhost:1337/${productWantToaddToCart.productImg[0].url}`}
+                    src={`${import.meta.env.VITE_SOME_API}/${productWantToaddToCart.productImg[0].url}`}
                     alt=""
                   />
                 </ToggleButton>
@@ -319,7 +299,7 @@ export default function Main() {
                 >
                   <img
                     className="w-12 h-12"
-                    src={`http://localhost:1337/${productWantToaddToCart.productImg[1].url}`}
+                    src={`${import.meta.env.VITE_SOME_API}/${productWantToaddToCart.productImg[1].url}`}
                     alt=""
                   />
                 </ToggleButton>
@@ -331,7 +311,9 @@ export default function Main() {
                   m: { xs: "20px auto 0", sm: "20px 0 0" },
                 }}
                 variant="contained"
-                onClick={handleOpen}
+                onClick={() => {
+                  counterIncramentAndAddProductToCart(productWantToaddToCart);
+                }}
               >
                 <ShoppingCartIcon sx={{ mr: "10px" }} />
                 Buy Now
@@ -340,6 +322,11 @@ export default function Main() {
           </Box>
         </Modal>
       )}
+      <Cart
+        key={productInsideCart.id}
+        producListInCart={productInsideCart}
+        setProductInsideCart={setProductInsideCart}
+      />
     </Container>
   );
 }

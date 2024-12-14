@@ -7,6 +7,7 @@
  import Hero from "./compenent/hero/Hero";
  import Box from "@mui/material/Box";
  import Main from "./compenent/main/Main";
+ import CounterProvider from "./Context/CounterCartContext";
 
 //  dark-mode-theme
 import {  CssBaseline, ThemeProvider } from "@mui/material";
@@ -20,6 +21,7 @@ import { ColorModeContext, useMode } from "./theme";
     value={colorMode}>
       <ThemeProvider 
       theme={theme}>
+        <CounterProvider>
         <CssBaseline />
         <div className="App">
         <Header1/>
@@ -31,7 +33,9 @@ import { ColorModeContext, useMode } from "./theme";
     </Box>
     
         </div>
+        </CounterProvider>
       </ThemeProvider>
+
     </ColorModeContext.Provider>
   )
 }

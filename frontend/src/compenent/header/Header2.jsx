@@ -21,6 +21,10 @@ import Badge from '@mui/material/Badge';
 import IconButton from '@mui/material/IconButton';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 
+//costume hook Import
+import { useCounter } from "../../Context/CounterCartContext";
+import { useSetOpenSlide } from '../../Context/SlideContext';
+
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -79,12 +83,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const options = ["All Category", "Man ", "Woman"];
 
-export default function header2() {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+export default function Header2() {
+  const counter =useCounter()
+  const setOpen =useSetOpenSlide()
   const theme =useTheme()
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [anchorEl, setAnchorEl] = useState(null);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [selectedIndex, setSelectedIndex] = useState(0);
   const open = Boolean(anchorEl);
   const handleClickListItem = (event) => {
@@ -99,6 +102,12 @@ export default function header2() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+ 
   return (
     <Box
       component="section"
@@ -181,8 +190,8 @@ export default function header2() {
         className="flex items-center justify-center max-xs:!gap-2 gap-3"
         component="section"
       >
-         <IconButton aria-label="cart">
-      <StyledBadge badgeContent={4} color="secondary">
+         <IconButton onClick={handleClickOpen} aria-label="cart">
+      <StyledBadge badgeContent={counter} color="secondary">
         <ShoppingCartOutlinedIcon className="!h-5 !w-5" />
       </StyledBadge>
     </IconButton>

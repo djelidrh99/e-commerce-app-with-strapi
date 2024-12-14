@@ -24,6 +24,7 @@ export const getDesignTokens = (mode) => ({
             main: "rgb(241 245 249)",
             specialBg:"white"
           },
+         
         }
       : {
           // palette values for dark mode

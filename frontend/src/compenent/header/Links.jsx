@@ -7,11 +7,12 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
+
 // eslint-disable-next-line react/prop-types
-export default function Links({Title,key}) {
+export default function Links({Title}) {
   return (
     <Box
-    key={key}
+    
       sx={{
         ":hover .navLink" :{display:"block"},
         display: "flex",
