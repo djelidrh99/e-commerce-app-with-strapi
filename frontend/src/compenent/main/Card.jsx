@@ -35,7 +35,7 @@ export default function MyCard({product,productModal}) {
           component="img"
           height="194"
           // eslint-disable-next-line react/prop-types
-          image={`${import.meta.env.VITE_SOME_API}/${product.productImg[0].url}`}
+          image={`${product.productImg[0].url}`}
           alt="Paella dish"
           sx={{
             cursor: "pointer",

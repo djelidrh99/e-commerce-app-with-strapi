@@ -9,7 +9,7 @@
     "develop": "strapi develop",
     "start": "strapi start",
     "strapi": "strapi"
-  },
+    },
   "dependencies": {
     "@strapi/plugin-cloud": "5.5.1",
     "@strapi/plugin-users-permissions": "5.5.1",

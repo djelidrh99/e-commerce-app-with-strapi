@@ -52,6 +52,7 @@ export default function Main() {
 useEffect(()=>{
 if(sessionStorage.getItem("myCart")) {
 setProductInsideCart(JSON.parse(sessionStorage.getItem("myCart")))
+setCounter(productInsideCart.length)
 }
 },[])
   const [img, setImg] = useState("public/Product/final.png");
@@ -254,7 +255,7 @@ setProductInsideCart(JSON.parse(sessionStorage.getItem("myCart")))
                   height: "330px",
                   maxWidth: "300px",
                 }}
-                src={`${import.meta.env.VITE_SOME_API}/${img}`}
+                src={`${img}`}
                 alt=""
               />
             </Box>
@@ -289,7 +290,7 @@ setProductInsideCart(JSON.parse(sessionStorage.getItem("myCart")))
                 >
                   <img
                     className="w-12 h-12"
-                    src={`${import.meta.env.VITE_SOME_API}/${productWantToaddToCart.productImg[0].url}`}
+                    src={`${productWantToaddToCart.productImg[0].url}`}
                     alt=""
                   />
                 </ToggleButton>
@@ -299,7 +300,7 @@ setProductInsideCart(JSON.parse(sessionStorage.getItem("myCart")))
                 >
                   <img
                     className="w-12 h-12"
-                    src={`${import.meta.env.VITE_SOME_API}/${productWantToaddToCart.productImg[1].url}`}
+                    src={`${productWantToaddToCart.productImg[1].url}`}
                     alt=""
                   />
                 </ToggleButton>
