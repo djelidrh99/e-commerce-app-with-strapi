@@ -4,10 +4,12 @@
   "private": true,
   "description": "A Strapi application",
   "scripts": {
+    "preinstall": "rm -rf node_modules .cache",
     "build": "strapi build",
-    "deploy": "strapi deploy",
+    "postinstall": "yarn build",
     "develop": "strapi develop",
     "start": "strapi start",
+    "deploy": "strapi deploy",
     "strapi": "strapi"
     },
   "dependencies": {
